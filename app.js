@@ -1,20 +1,12 @@
 var http = require('http');
 
-var opt = {
-    host: 'http://www.people.com.cn',
-    method:'get',
-    path:'/rss/politics.xml'
-}
-var body = '';
-var req = http.request(opt,function (res) {
-    console.log('response:'+res.statusCode)
-    res.on('data',function (data) {
-        body += data;
-    }).on('end',function () {
-        console.log(body)
+
+http.get('http://www.people.com.cn/rss/politics.xml',function (data) {
+    var str = '';
+    data.on("data",function (chunk) {
+        str+=chunk;
     })
-}).on('error',function (err) {
-    console.log('error:',err.message)
+    data.on('end',function () {
+        console.log(str.toString())
+    })
 })
-req.write(data);
-req.end();

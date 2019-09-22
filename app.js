@@ -1,5 +1,7 @@
 var http = require('http');
-var parseString = require('xml2js').parseString;
+var xml2js = require('xml2js');
+var xmlParser = new xml2js.Parser({explicitArray:false,ignoreAttrs:true})
+var fs = require('fs');
 
 http.get('http://www.people.com.cn/rss/politics.xml',function (data) {
     var str = '';
@@ -7,9 +9,17 @@ http.get('http://www.people.com.cn/rss/politics.xml',function (data) {
         str+=chunk;
     })
     data.on('end',function () {
-       // console.log(str.toString())
-        parseString(str,function (err,result) {
-            console.dir(JSON.stringify(result))
+        xmlParser.parseString(str,function (err,resuslt) {
+            if (err) {
+                console.log(err)
+                return 
+            }
+            let data = JSON.stringify(resuslt,null,'\t')
+             data = JSON.parse(data).rss.channel.item
+             data = JSON.stringify(data,null,'\t')
+            fs.writeFile('data.json',data,function(err){
+                 if (err) {res.status(500).send('Server is error...')}
+                 })
         })
     })
 })

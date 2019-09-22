@@ -27,10 +27,11 @@ http.get('http://www.people.com.cn/rss/politics.xml',function (data) {
             }
             let data = JSON.stringify(resuslt,null,'\t')
              data = JSON.parse(data).rss.channel.item
-             data = JSON.stringify(data,null,'\t')
-            fs.writeFile('data.json',data,function(err){
-                 if (err) {res.status(500).send('Server is error...')}
-                 })
+            //  data = JSON.stringify(data,null,'\t')
+            // fs.writeFile('data.json',data,function(err){
+            //      if (err) {res.status(500).send('Server is error...')}
+            //      })
+            
         })
     })
 })
